@@ -97,6 +97,7 @@ export default function Home() {
                 <option value="Pending">Pending</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Completed">Completed</option>
+                <option value="Hold">Hold</option>
               </select>
 
               {/* Priority Filter */}
