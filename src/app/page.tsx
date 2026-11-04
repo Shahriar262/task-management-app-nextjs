@@ -7,6 +7,8 @@ import TaskTable from "@/components/TaskTable";
 import { useTasks } from "@/hooks/useTasks";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 export default function Home() {
   const { tasks, addTask, deleteTask, editTask } = useTasks();
@@ -90,7 +92,6 @@ export default function Home() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                defaultValue="All"
                 className="w-full border rounded-md px-3 py-2.5 text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="All">All Status</option>
@@ -134,14 +135,36 @@ export default function Home() {
             </div>
           </div>
 
-          <TaskTable
-            tasks={sortedTasks}
-            onDeleteClick={(id) => setSelectedTaskId(id)}
-            onEditClick={(id) => {
-              setEditedTaskId(id);
-              setIsFormOpen(true);
-            }}
-          />
+          <DndProvider backend={HTML5Backend}>
+            <TaskTable
+              tasks={sortedTasks}
+              onDeleteClick={(id) => setSelectedTaskId(id)}
+              onEditClick={(id) => {
+                setEditedTaskId(id);
+                setIsFormOpen(true);
+              }}
+              onStatusChange={(id, newStatus) => {
+                console.log("Dragged ID:", id);
+                console.log(
+                  "All task IDs:",
+                  tasks.map((task) => task.id),
+                );
+                const taskToUpdate = tasks.find((task) => task.id === id);
+
+                console.log("Task found:", taskToUpdate);
+
+                if (taskToUpdate) {
+                  editTask({
+                    ...taskToUpdate,
+                    status: newStatus,
+                    updatedAt: new Date().toISOString(),
+                  });
+
+                  console.log("Status changed to:", newStatus);
+                }
+              }}
+            />
+          </DndProvider>
           {isFormOpen && (
             <TaskFormModal
               task={editingTask}

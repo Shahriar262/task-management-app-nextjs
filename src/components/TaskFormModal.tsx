@@ -90,19 +90,21 @@ export default function TaskFormModal({
               </select>
             </div>
 
-            <div>
-              <label className="block mb-1 text-sm font-medium">Status</label>
-              <select
-                className="w-full border rounded-md p-2"
-                value={status}
-                onChange={(e) => setStatus(e.target.value as Task["status"])}
-              >
-                <option>Pending</option>
-                <option>In Progress</option>
-                <option>Completed</option>
-                <option>Hold</option>
-              </select>
-            </div>
+            {task && (
+              <div>
+                <label className="block mb-1 text-sm font-medium">Status</label>
+                <select
+                  className="w-full border rounded-md p-2"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value as Task["status"])}
+                >
+                  <option>Pending</option>
+                  <option>In Progress</option>
+                  <option>Completed</option>
+                  <option>Hold</option>
+                </select>
+              </div>
+            )}
           </div>
 
           <div>
